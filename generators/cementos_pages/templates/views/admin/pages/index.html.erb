@@ -1,45 +1,23 @@
-<div class="row">
-
-	<div class="column first four">
-		<h2><%= @frame.titleize %> Pages</h2>
-		<div class="pageActions">
-			 <div class="addPage">
-            	
-				<%= link_to 'New Page', new_admin_page_path(@frame) %>
-			</div>
-
-		</div>
-	</div>
-
+<h1>Pages</h1>
+	
+<ul id="frames">
+<% Page.frames.each_with_index do |frame, i| %>
+	<li><h3 style="display: inline">Frames &nbsp;</h3></li>
+	<li class="frame<% if i == 0 %> first<% end %><% if frame == @frame %> current<% end %>" >
+		<%= link_to frame.titleize, admin_pages_path(:frame => frame)%>
+	</li>
+<% end %>
+</ul>
+	
+<div class="new_page_link">
+	<%= link_to 'New Page', new_admin_page_path(@frame) %>
 </div>
 
-<div class="row">
-
-	<div class="column first four">
-		<ul id="subpages">
-			<!-- <li class="subpage first<% if controller == 'admin/homepage' %> here<% end %>" >
-				<span><%= link_to "Homepage", admin_home_pages_path %></span>
-			</li> -->
-		<% Page.frames.each_with_index do |frame, i| %>
-			<li class="subpage<% if i == 0 %> first<% end %><% if frame == @frame %> here<% end %>" >
-				<%= link_to frame.titleize, admin_pages_path(:frame => frame)%>
-			</li>
-		<% end %>
-		</ul>	
-	</div>
-
+<div class="pages">
+	<h3>Pages in <%= @frame.titleize %></h3>
+	<%= render :partial => 'tree', :locals => { :pages => [ Page.find_by_frame_and_parent_id(@frame, nil) ], :parent => false }%>
 </div>
 
-<div class="row">
-	<div class="column first four">
-		<div class="content">
-			<h6 class="title">Title</h6>
-			<h6 class="created">Created</h6>
-			<h6 class="lastUpdated">Last Updated</h6>
-			<%= render :partial => 'tree', :locals => { :pages => [ Page.find_by_frame_and_parent_id(@frame, nil) ], :parent => false }%>
-		</div>
-	</div>
-</div>
 
 <script type="text/javascript">
 <% if session[:tree_toggles] -%>

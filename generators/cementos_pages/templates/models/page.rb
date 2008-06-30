@@ -6,7 +6,7 @@ class Page < ActiveRecord::Base
   acts_as_tree :order => :position
   acts_as_list :scope => :parent_id
   
-  has_mixed_content
+  # has_mixed_content
 
   # is_indexed :fields => %w(name),
   #   :concatenate => [
@@ -28,12 +28,12 @@ class Page < ActiveRecord::Base
   def validate
     errors.add(:parent, "cannot be self") if self.parent_id.to_i > 0 && self.parent_id == self.id
     errors.add(:slug, "contains invalid characters") if self.slug && self.slug.length != self.slug.chars.length
-    contents.select{|c| !c.to_be_destroyed}.each do |content|
-      unless content.valid?
-        errors.add_to_base "Contents contain errors" 
-        break
-      end 
-    end
+    # contents.select{|c| !c.to_be_destroyed}.each do |content|
+    #      unless content.valid?
+    #        errors.add_to_base "Contents contain errors" 
+    #        break
+    #      end 
+    #    end
   end
   
   # used by navigation views to determine whether to render children at all

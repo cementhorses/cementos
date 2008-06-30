@@ -10,4 +10,8 @@ Example
 Example goes here.
 
 
+Be sure to script/plugin install acts_as_tree
+and acts_as_list
+
+
 Copyright (c) 2008 [name of plugin creator], released under the MIT license

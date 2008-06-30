@@ -1,0 +1,13 @@
+<div class="buttons">
+    <div class="submit_button">
+        <%= f.submit(%w{edit update}.include?(params[:action]) ? 'Save &amp; Close' : 'Create') %>
+    </div>
+	<% if %w{edit update}.include?(params[:action]) %>
+	<div class="submit_button">
+		<%= f.submit 'Save' %>
+	</div>
+	<% end %>
+    <div class="cancel_button">
+        <%= link_to 'Cancel', :action => 'index', :frame => @frame %>
+    </div>
+</div>

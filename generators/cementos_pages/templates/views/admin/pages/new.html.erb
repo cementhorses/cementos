@@ -1,0 +1,7 @@
+<h1>New Page</h1>
+
+<% form_for [:admin, @page], :url => (@page.new_record? ? admin_pages_path(@frame) : admin_page_path(@page.frame, @page)) do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+<% end %>
+<%#= render :partial => 'admin/assets/assets_form' %>
+

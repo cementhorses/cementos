@@ -1,0 +1,72 @@
+<%= f.hidden_field :lock_version %>
+
+<%= render :partial => 'form_buttons', :locals => {:f => f} %>
+
+<div class="column first three">
+    <div id="page_attributes" >
+        <fieldset>
+            <div class="field">
+                <%= f.label      :name %>
+                <%= f.text_field :name %>
+            </div>
+            <% unless @page.parent_id.nil? && %w(edit update).include?(params[:action]) %>
+            <div class="field">
+                <%= f.label      :parent_id, 'Parent' %>
+                <%= f.select     :parent_id, threaded_page_options %>
+            </div>
+            <% end %>
+            <div id="advanced_page_attributes_toggle">
+                <%= link_to_function 'Advanced attributes', "$('advanced_page_attributes').toggle()" %>
+            </div>
+        </fieldset>
+        <div id="advanced_page_attributes" style="display: none;">
+            <fieldset id="advanced_options">
+                <div class="field boxes">
+                    <%= f.check_box  :display_in_navigation %>
+                    <%= f.label      :display_in_navigation %>
+                </div>
+                <div class="field boxes">
+                    <%= f.check_box  :published %>
+                    <%= f.label      :published %>
+                </div>      
+                <div class="field">
+                    <%= f.label      :template %>
+                    <%= f.select     :template, Page.template_options.collect{|t| [t.titleize.sub("What We Do", "Stories Map"), t]} %> 
+                </div>
+            </fieldset>
+            <fieldset id="advanced_text">
+                <% unless @page.parent_id.nil? || %w(new update).include?(params[:action]) %>
+                <div class="field">
+                    <%= f.label      :slug %>
+                    <%= f.text_field :slug %>
+                </div>
+                <% end %>
+
+                <div class="field">
+                    <%= f.label      :description %>
+                    <%= f.text_area  :description, :rows => 6 %>
+                </div>
+
+								<div class="field">
+                    <%= f.label      :keywords %>
+                    <%= f.text_area  :keywords, :rows => 6 %>
+                </div>
+            </fieldset>
+        </div>	
+        <% javascript_tag "$('advanced_page_attributes').show()" if @page.errors[:slug] %>
+    </div>
+    <div id="page_content">
+        <h3>Content</h3>
+        
+        
+        <%# mixed_content_area :container => @page %>
+        <%#= render :partial => 'admin/contents/content_area', :locals => {
+            :container_id => @page.id, 
+            :container_type => 'Page', 
+            :default_type => 'Textile',
+            :contents => @page.contents,
+            :object_name => 'page[contents]'} %>
+        </div>
+    </div>
+
+	<%= render :partial => 'form_buttons', :locals => {:f => f} %>

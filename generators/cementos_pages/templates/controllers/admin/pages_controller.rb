@@ -57,12 +57,12 @@ class Admin::PagesController < ApplicationController
   # DELETE /pages/1
   # DELETE /pages/1.xml
   def destroy
-   expire_cache
-   unless @page
-     flash[:notice] = 'Could not delete. Page does not exist.'
-     redirect_to admin_pages_url
-     return
-   end
+    expire_cache
+    unless @page
+      flash[:notice] = 'Could not delete. Page does not exist.'
+      redirect_to admin_pages_url
+      return
+    end
     if @page.parent_id.nil?
       flash[:notice] = "Cannot delete root page"
     elsif !@page.immutable_name.nil?
@@ -70,13 +70,12 @@ class Admin::PagesController < ApplicationController
     elsif !@page.children.empty?
       flash[:notice] = "Cannot delete a page with sub-pages"
     else
-       @parent = @page.parent
-       @page.destroy
-       @parent.sort_children
-       flash[:notice] = "Page deleted: #{@page.path}"
+      @parent = @page.parent
+      @page.destroy
+      @parent.sort_children
+      flash[:notice] = "Page deleted: #{@page.path}"
     end
-      redirect_to admin_pages_url
-    end
+    redirect_to admin_pages_url
   end
   
   def up

@@ -11,9 +11,9 @@ class PagesController < ApplicationController
   ### template actions ###
   # please alphabetize!
 
-  # this action will run for any page whose template is set to 'example'
-  def example
-    # this will look for pages/example.html.erb by default...
+  # this action will run for any page whose template is set to 'generic'
+  def generic
+    # this will look for pages/generic.html.erb by default...
     # or it could use :render, just like a normal action
   end
 
@@ -26,10 +26,10 @@ class PagesController < ApplicationController
     @frame = params[:frame] || ''
     path = '/' + File.join(@frame, params[:path])
     path.chop! if path.ends_with?('/') # Attempt fails to find '/:frame/'
-    @<%= file_name %> = <%= class_name %>.find_by_path(path)
-    if @<%= file_name %> and (@<%= file_name %>.published?)
-      self.send(@<%= file_name %>.template) if self.respond_to?(@<%= file_name %>.template)
-      render :action => @<%= file_name %>.template unless performed?
+    @<%= file_name.singularize %> = <%= class_name.singularize %>.find_by_path(path)
+    if @<%= file_name.singularize %> and (@<%= file_name.singularize %>.published?)
+      self.send(@<%= file_name.singularize %>.template) if self.respond_to?(@<%= file_name.singularize %>.template)
+      render :action => @<%= file_name.singularize %>.template unless performed?
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
       return
