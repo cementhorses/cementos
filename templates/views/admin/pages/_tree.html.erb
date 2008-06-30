@@ -1,0 +1,35 @@
+<ul class="tree"<%= parent ? "id=\"tree_#{parent.id}\"" : '' %>>
+<% pages.each do |page| %>
+	
+	<li class="tree_node">
+	
+	<div class="tree_item level_<%= page.ancestors.size %><%= ' unpublished' unless page.published? %>" onmouseover="this.style.backgroundColor='#fff'; document.getElementById('tree_toggle_<%= page.id %>').style.backgroundPosition='0 -14px';" onmouseout="this.style.backgroundColor='#f8f6ed'; document.getElementById('tree_toggle_<%= page.id %>').style.backgroundPosition='0 0';">
+		<div class="item_title">
+			<% if page.children.size > 0 %>
+			<span class="tree_toggle">
+				<a href="#" id="tree_toggle_<%= page.id %>" class="expanded" onclick="toggleTree('<%= "#{page.id}" %>', this); return false;">&darr;</a>
+			</span>
+			<% else %>
+			<span class="tree_toggle empty">&rarr;</span>
+			<% end %>
+			<%= link_to page.name, edit_admin_page_path(page.frame, page), :class => 'pageTitle' %> (<%= link_to 'Show', page.path, :popup => true %>)
+		</div>
+		<div class="item_actions">
+			<%= link_to 'Edit', edit_admin_page_path(page.frame, page), :class => 'item_edit' %>
+			<span>move</span>
+			<%= link_to 'Up', up_admin_page_path(page.frame, page), :confirm => "Move &quot;#{page.name}&quot; up?", :class => 'item_moveUp' %>
+			<%= link_to 'Down', down_admin_page_path(page.frame, page), :confirm => "Move &quot;#{page.name}&quot; down?", :class => 'item_moveDown' %>
+			<%= link_to 'Destroy', admin_page_path(page.frame, page), :confirm => "PERMANENTLY delete &quot;#{page.name}&quot;?", :method => :delete, :class => 'item_destroy'%>
+			<span class="lastUpdated"><%= format_datetime(page.created_at) if page.created_at %></span>
+			<span class="lastUpdated"><%= format_datetime(page.edited_at) if page.edited_at %></span>
+		</div>
+	</div>
+
+	<% if page.children.size > 0 && page.template != 'stories' && page.template != 'news' %>
+	<%= render :partial => 'tree', :locals => { :pages => page.children, :parent => page } %>
+	<% end %>
+	</li>
+	
+	
+<% end %>
+</ul>
