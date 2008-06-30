@@ -26,10 +26,10 @@ class PagesController < ApplicationController
     @frame = params[:frame] || ''
     path = '/' + File.join(@frame, params[:path])
     path.chop! if path.ends_with?('/') # Attempt fails to find '/:frame/'
-    @<%= file_name.singularize %> = <%= class_name.singularize %>.find_by_path(path)
-    if @<%= file_name.singularize %> and (@<%= file_name.singularize %>.published?)
-      self.send(@<%= file_name.singularize %>.template) if self.respond_to?(@<%= file_name.singularize %>.template)
-      render :action => @<%= file_name.singularize %>.template unless performed?
+    @page = Page.find_by_path(path)
+    if @page and (@page.published?)
+      self.send(@page.template) if self.respond_to?(@page.template)
+      render :action => @page.template unless performed?
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :status => 404
       return

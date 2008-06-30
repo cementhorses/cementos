@@ -2,7 +2,6 @@
 
 <%= render :partial => 'form_buttons', :locals => {:f => f} %>
 
-<div class="column first three">
     <div id="page_attributes" >
         <fieldset>
             <div class="field">
@@ -54,7 +53,8 @@
             </fieldset>
         </div>	
         <% javascript_tag "$('advanced_page_attributes').show()" if @page.errors[:slug] %>
-    </div>
+		</div>
+
     <div id="page_content">
         <h3>Content</h3>
         

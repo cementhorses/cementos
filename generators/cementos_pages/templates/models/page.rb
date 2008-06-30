@@ -44,10 +44,10 @@ class Page < ActiveRecord::Base
   def sort_children
     self.children.find(:all).each_with_index do |page, i|
       page.update_attribute(:position, i)
-      memory = i + 1
+      @memory = i + 1
     end
     self.children.find(:all).each_with_index do |page, i|
-      page.update_attribute(:position, i + memory)
+      page.update_attribute(:position, i + @memory)
     end
   end
    

@@ -1,19 +1,28 @@
-class CementosPagesGenerator < Rails::Generator::NamedBase
+class CementosPagesGenerator < Rails::Generator::Base
+  
+  default_options :skip_migration => false,
+                  :textile => true,
+                  :mixed_content => false
+  
+  def initialize(runtime_args, runtime_options = {})
+    super
+    
+  end
   
   def manifest
     record do |m|
       
       # Controllers
-      m.template 'controllers/pages_controller.rb', 'app/controllers/pages_controller.rb'
+      m.file 'controllers/pages_controller.rb', 'app/controllers/pages_controller.rb'
       m.directory 'app/controllers/admin'
-      m.template 'controllers/admin/pages_controller.rb', 'app/controllers/admin/pages_controller.rb'
+      m.file 'controllers/admin/pages_controller.rb', 'app/controllers/admin/pages_controller.rb'
       
       # Helpers
       m.directory 'app/helpers/admin'
       m.file 'helpers/admin/pages_helper.rb', 'app/helpers/admin/pages_helper.rb'
       
       # Models
-      m.template 'models/page.rb', 'app/models/page.rb'
+      m.file 'models/page.rb', 'app/models/page.rb'
       
       # Views
       m.directory 'app/views/pages'
@@ -49,9 +58,30 @@ class CementosPagesGenerator < Rails::Generator::NamedBase
       m.file 'images/admin/icons/preview_page.png', 'public/images/admin/icons/preview_page.png'
       
       # Migration
-      m.migration_template "migrate/create_cementos_pages.rb", "db/migrate"
+      unless options[:skip_migration]
+        m.migration_template "migrate/create_cementos_pages.rb", 'db/migrate', 
+                             :migration_file_name => "create_cementos_pages"
+      end
+      
+      # Routes
+      # m.route_resources :pages
+      
+      # README
+      m.readme('README')
       
     end
+  end
+  
+  protected
+  def banner
+    "Usage: #{$0} cementos_pages"
+  end
+
+  def add_options!(opt)
+    opt.separator ''
+    opt.separator 'Options:'
+    opt.on("--skip-migration", 
+           "Don't generate a migration file for the pages model") { |v| options[:skip_migration] = v }
   end
   
   

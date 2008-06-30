@@ -36,14 +36,12 @@ class Admin::PagesController < ApplicationController
     expire_cache
     @page.update_attributes(params[:page])
     # @app_settings.update_attributes(params[:app_settings]) if params[:app_settings]
-    if @app_settings.valid? && @page.valid?
+    if @page.valid? #@app_settings.valid? && @page.valid?
       flash[:notice] = "Page saved: #{@page.path}"
-      format.html do
-        if params[:commit] == 'Save' # save and reload edit interface
-          render :action => 'edit'
-        else # save and done editing
-          redirect_to admin_pages_path
-        end
+      if params[:commit] == 'Save' # save and reload edit interface
+        render :action => 'edit'
+      else # save and done editing
+        redirect_to admin_pages_path
       end
     else
       render :action => "edit"
