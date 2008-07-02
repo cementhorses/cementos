@@ -41,6 +41,27 @@ class Page < ActiveRecord::Base
     children.select {|c| c.published? and c.display_in_navigation? }
   end
   
+  
+  def has_parent?
+    !parent_id.nil?
+  end
+
+  def sibling_of?(page)
+    parent_id == page.parent_id
+  end
+
+  alias and_siblings self_and_siblings
+
+  def siblings
+    self.and_siblings - self
+  end
+
+  def siblings?
+    parent.children.count > 1
+  end
+  
+  
+  
   def sort_children
     self.children.find(:all).each_with_index do |page, i|
       page.update_attribute(:position, i)
@@ -74,7 +95,8 @@ class Page < ActiveRecord::Base
   
   def Page.frames
     return Page.find_all_by_parent_id(nil).collect{|p| p.slug}
-    # return [ 'about-us', 'what-we-do', 'what-you-can-do', 'grants', 'global' ]
+    # use the line below instead to define frames without using the database
+    # return [ 'about', 'what-we-do', 'events' ]
   end
   
   def Page.template_options

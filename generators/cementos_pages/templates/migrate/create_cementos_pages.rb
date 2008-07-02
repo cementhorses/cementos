@@ -4,7 +4,7 @@ class CreateCementosPages < ActiveRecord::Migration
       t.string   "name"
       t.string   "path"
       t.string   "slug"
-      t.string   "template"
+      t.string   "template",              :default => 'generic'
       t.integer  "parent_id"
       t.integer  "position",              :default => 0,     :null => false
       t.integer  "lock_version",          :default => 0,     :null => false

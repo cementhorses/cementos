@@ -2,7 +2,8 @@ class CementosPagesGenerator < Rails::Generator::Base
   
   default_options :skip_migration => false,
                   :textile => true,
-                  :mixed_content => false
+                  :mixed_content => false,
+                  :interface => :oldschool
   
   def initialize(runtime_args, runtime_options = {})
     super
@@ -15,7 +16,7 @@ class CementosPagesGenerator < Rails::Generator::Base
       # Controllers
       m.file 'controllers/pages_controller.rb', 'app/controllers/pages_controller.rb'
       m.directory 'app/controllers/admin'
-      m.file 'controllers/admin/pages_controller.rb', 'app/controllers/admin/pages_controller.rb'
+      m.file "controllers/admin/#{options[:interface]}/pages_controller.rb", 'app/controllers/admin/pages_controller.rb'
       
       # Helpers
       m.directory 'app/helpers/admin'
@@ -29,8 +30,8 @@ class CementosPagesGenerator < Rails::Generator::Base
       m.file 'views/pages/home.html.erb', 'app/views/pages/home.html.erb'
       m.file 'views/pages/generic.html.erb', 'app/views/pages/generic.html.erb'
       m.directory 'app/views/admin/pages'
-      m.file 'views/admin/pages/index.html.erb', 'app/views/admin/pages/index.html.erb'
-      m.file 'views/admin/pages/_tree.html.erb', 'app/views/admin/pages/_tree.html.erb'
+      m.file "views/admin/pages/#{options[:interface]}/index.html.erb", 'app/views/admin/pages/index.html.erb'
+      m.file "views/admin/pages/#{options[:interface]}/_tree.html.erb", 'app/views/admin/pages/_tree.html.erb'
       m.file 'views/admin/pages/edit.html.erb', 'app/views/admin/pages/edit.html.erb'
       m.file 'views/admin/pages/new.html.erb', 'app/views/admin/pages/new.html.erb'
       m.file 'views/admin/pages/_form.html.erb', 'app/views/admin/pages/_form.html.erb'
@@ -82,6 +83,8 @@ class CementosPagesGenerator < Rails::Generator::Base
     opt.separator 'Options:'
     opt.on("--skip-migration", 
            "Don't generate a migration file for the pages model") { |v| options[:skip_migration] = v }
+    opt.on("--draggable-interface", 
+            "Use the draggable pages admin interface") { |v| options[:interface] = :draggable }
   end
   
   

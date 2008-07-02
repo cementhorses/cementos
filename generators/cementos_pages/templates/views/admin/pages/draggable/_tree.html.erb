@@ -1,0 +1,38 @@
+<% content_tag :ul, :class => parent ? 'branch' : 'root', :id => parent ? "tree_#{parent.id}" : 'tree_root' do %>
+
+	<% pages.each do |page| %>
+		<% if page.has_parent? %>
+		<li id="before_<%= dom_id(page) %>" class="tween">
+			<%= drop_receiving_element("before_#{dom_id(page)}", :url => { :action => 'sort', :before => page.id }, :accept => 'page', :hoverclass => 'open', :before => 'if (element.id != "create_a_new_page") { Element.hide(element); Element.show($("loading")); }') %>
+		</li>
+		<% end %>
+		<% content_tag_for 'li', page, :class => 'tree_node' do %>
+			<div id="<%= dom_id(page) %>_div" class="tree_item level_<%= page.ancestors.size %>" onmouseover="if (hover != true){Element.show($('item_actions_<%= page.id %>'))};" onmouseout="Element.hide($('item_actions_<%= page.id %>'));">
+				<span class="item_actions" id="item_actions_<%= page.id %>" style="display: none;">
+					<%= link_to_remote image_tag('admin/delete.png'), :url => admin_page_path(page.frame, page),
+						:confirm => "Delete '#{page.name}'?", :method => :delete,
+						:class => 'item_destroy' if page.has_parent? %>
+					<%= link_to image_tag('admin/pencil.png'), edit_admin_page_path(page.frame, page) %>
+					<%= link_to image_tag('admin/magnifier.png'), page.path, :popup => true %>
+				</span>
+				<div class="item_title<%= ' published' if page.published? %>" onmousedown="hover = true; Element.hide($('item_actions_<%= page.id %>'));" onmouseup="hover = false; Element.show($('item_actions_<%= page.id %>'));">
+					<%= page.name %>
+				</div>
+				<%= content_tag :span, image_tag('indicator.gif'), :id => 'loading', :style => 'display: none;' if page == page.root %>
+			</div>
+			
+			
+			<%# { :frame => @frame, :action => 'insert_page', :parent => page.id }%>
+			<%= draggable_element("#{dom_id(page)}", :revert => true, :handle => '"item_title"') if page.parent %>
+			<%= drop_receiving_element("#{dom_id(page)}", :url => "/admin/#{@frame}/pages/insert_page?parent_id=#{page.id}", :hoverclass => 'bold', :before => 'if (element.id != "create_a_new_page") { Element.hide(element); Element.show($("loading")); }') %>
+						
+			<%= render :partial => 'tree', :locals => { :pages => page.children, :parent => page } unless page.children.empty? %>
+		<% end %>
+		<% if page.has_parent? and page == pages.last %>
+		<li id="after_<%= dom_id(page) %>" class="tween">
+			<%= drop_receiving_element("after_#{dom_id(page)}", :url => { :action => 'sort', :after => page.id }, :accept => 'page', :hoverclass => 'open', :before => 'if (element.id != "create_a_new_page") { Element.hide(element); Element.show($("loading")); }') %>
+		</li>
+		<% end %>
+	<% end %>
+		
+<% end %>

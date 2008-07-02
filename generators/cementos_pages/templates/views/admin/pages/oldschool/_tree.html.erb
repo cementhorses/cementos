@@ -18,8 +18,8 @@
 		<div class="item_actions">
 			<%= link_to 'Edit', edit_admin_page_path(page.frame, page), :class => 'item_edit' %>
 			<span>move</span>
-			<%= link_to 'Up', up_admin_page_path(page.frame, page), :confirm => "Move &quot;#{page.name}&quot; up?", :class => 'item_move_up' %>
-			<%= link_to 'Down', down_admin_page_path(page.frame, page), :confirm => "Move &quot;#{page.name}&quot; down?", :class => 'item_move_down' %>
+			<%= link_to 'Up', up_admin_page_path(page.frame, page), :method => :put, :confirm => "Move &quot;#{page.name}&quot; up?", :class => 'item_move_up' %>
+			<%= link_to 'Down', down_admin_page_path(page.frame, page), :method => :put, :confirm => "Move &quot;#{page.name}&quot; down?", :class => 'item_move_down' %>
 			<%= link_to 'Destroy', admin_page_path(page.frame, page), :confirm => "PERMANENTLY delete &quot;#{page.name}&quot;?", :method => :delete, :class => 'item_destroy'%>
 		</div>
 	</div>

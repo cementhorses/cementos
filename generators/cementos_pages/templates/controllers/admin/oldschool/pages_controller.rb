@@ -1,9 +1,11 @@
 class Admin::PagesController < ApplicationController
   
-  before_filter :set_frame
+  before_filter :get_frame
   before_filter :get_page, :only => [:show, :new, :create, :edit, :update, :destroy, :up, :down]
   
-  # index
+  def index
+    @root = Page.find_by_frame_and_parent_id(@frame, nil)
+  end
     
   def tree_toggle
     session[:tree_toggles] = { } unless session[:tree_toggles]
@@ -102,9 +104,16 @@ class Admin::PagesController < ApplicationController
 
   
   private
-  def set_frame
-    @frame = params[:frame] || Page.default_frame
-    @frame = Page.default_frame unless Page.frames.include?(@frame)
+  def get_frame
+    @frame = params[:frame]
+    unless Page.frames.include?(@frame)
+      @frame = Page.default_frame
+      if @frame 
+        redirect_to admin_pages_path(@frame)
+      else  
+        raise "No frames exist (page section root nodes). Please create one or more pages without parents."
+      end
+    end
   end
   
   def get_page

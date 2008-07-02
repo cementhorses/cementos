@@ -15,7 +15,7 @@
 
 <div class="pages">
 	<h3>Pages in <%= @frame.titleize %></h3>
-	<%= render :partial => 'tree', :locals => { :pages => [ Page.find_by_frame_and_parent_id(@frame, nil) ], :parent => false }%>
+	<%= render :partial => 'tree', :locals => { :pages => [ @root ], :parent => false }%>
 </div>
 
 
