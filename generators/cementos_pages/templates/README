@@ -1,3 +1,15 @@
 Be sure to install acts_as_tree and acts_as_list:
+
 script/plugin install acts_as_tree
 script/plugin install acts_as_list
+
+And add the following to your routes.rb:
+
+map.namespace :admin do |admin|
+  admin.resources :pages, :member => { :up => :get, :down => :get, :tree_toggle => :get }, :path_prefix => '/admin/:frame'
+end
+
+# Hungry page path for CMS
+map.connect '/:frame/*path', :controller => 'pages'
+
+
