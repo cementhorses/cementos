@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class Site::PagesController < ApplicationController
   
   before_filter :load, :except => :home
 
