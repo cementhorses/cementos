@@ -1,3 +1,2 @@
 # Install hook code here
-
-require 'cementos_pages'
+# require 'cementos_pages'
