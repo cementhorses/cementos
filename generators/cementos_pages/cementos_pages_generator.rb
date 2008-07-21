@@ -16,7 +16,7 @@ class CementosPagesGenerator < Rails::Generator::Base
       m.directory 'app/controllers/admin'
       m.file "controllers/admin/#{options[:interface]}/pages_controller.rb", 'app/controllers/admin/pages_controller.rb'
       m.directory 'app/controllers/site'
-      m.file 'controllers/site/pages_controller.rb', 'app/site/controllers/pages_controller.rb'
+      m.file 'controllers/site/pages_controller.rb', 'app/controllers/site/pages_controller.rb'
 
       # Helpers
       m.directory 'app/helpers/admin'
@@ -66,7 +66,7 @@ class CementosPagesGenerator < Rails::Generator::Base
       m.file 'test/functional/admin/pages_controller_test.rb', 'test/functional/admin/pages_controller_test.rb'
       m.directory 'test/functional/site'
       m.file 'test/functional/site/pages_controller_test.rb', 'test/functional/site/pages_controller_test.rb'
-      m.file 'test/fixtures/pages.yml'
+      m.file 'test/fixtures/pages.yml', 'test/fixtures/pages.yml'
 
       # Migration
       unless options[:skip_migration]
