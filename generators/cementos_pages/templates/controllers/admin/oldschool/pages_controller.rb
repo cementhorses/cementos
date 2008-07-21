@@ -1,12 +1,12 @@
 class Admin::PagesController < ApplicationController
-  
+
   before_filter :get_frame
   before_filter :get_page, :only => [:show, :new, :create, :edit, :update, :destroy, :up, :down]
-  
+
   def index
     @root = Page.find_by_frame_and_parent_id(@frame, nil)
   end
-    
+
   def tree_toggle
     session[:tree_toggles] = { } unless session[:tree_toggles]
     session[:tree_toggles][params[:id]] = (params[:state] == 'true')
@@ -15,11 +15,11 @@ class Admin::PagesController < ApplicationController
   def show
     redirect_to @page.path
   end
-  
+
   # new
-  
+
   # edit
-  
+
   def create
     @page = Page.new(params[:page])
     # @page.edited_at = Time.now
@@ -77,7 +77,7 @@ class Admin::PagesController < ApplicationController
     end
     redirect_to admin_pages_url
   end
-  
+
   def up
     if @page.parent
       @page.move_higher
@@ -89,7 +89,7 @@ class Admin::PagesController < ApplicationController
     end
     redirect_to admin_pages_path
   end
-  
+
   def down
     if @page.parent
       @page.move_lower
@@ -102,7 +102,6 @@ class Admin::PagesController < ApplicationController
     redirect_to admin_pages_path
   end
 
-  
   private
   def get_frame
     @frame = params[:frame]
@@ -115,16 +114,16 @@ class Admin::PagesController < ApplicationController
       end
     end
   end
-  
+
   def get_page
     @page = Page.find(params[:id]) if params[:id]
     @page ||= Page.new(:template => 'generic')
   end
-  
+
   def expire_cache
     @page.parent ? expire_through(@page.parent) : expire_through(@page)
   end
-  
+
   def expire_through(p)
     p.children.each do |c|
       expire_through(c)

@@ -21,7 +21,6 @@
 				<%= content_tag :span, image_tag('indicator.gif'), :id => 'loading', :style => 'display: none;' if page == page.root %>
 			</div>
 			
-			
 			<%# { :frame => @frame, :action => 'insert_page', :parent => page.id }%>
 			<%= draggable_element("#{dom_id(page)}", :revert => true, :handle => '"item_title"') if page.parent %>
 			<%= drop_receiving_element("#{dom_id(page)}", :url => "/admin/#{@frame}/pages/insert_page?parent_id=#{page.id}", :hoverclass => 'bold', :before => 'if (element.id != "create_a_new_page") { Element.hide(element); Element.show($("loading")); }') %>

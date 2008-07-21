@@ -1,20 +1,20 @@
-
 Be sure to install acts_as_tree and acts_as_list:
-script/plugin install acts_as_tree
-script/plugin install acts_as_list
+
+  script/plugin install acts_as_tree
+  script/plugin install acts_as_list
 
 And add the following to your routes.rb:
 
   map.namespace :admin do |admin|
     admin.connect 'pages', :controller => :pages
-    admin.resources :pages,
-                    :path_prefix => '/admin/:frame',
-                    :member => { :up => :put, :down => :put, :tree_toggle => :get }
+    admin.resources :pages, :path_prefix => '/admin/:frame',
+      :member => { :up => :put, :down => :put, :tree_toggle => :get }
   end
 
   # Hungry page path for Cementos Pages should be lowest priority route
-  map.connect '/:frame/*path', :controller => 'pages'
-              # add requirements to the frame param to restrict matches
-	            #:requirements => { :frame => /about|what-we-do|events/ }
+  map.connect '/:frame/*path', :controller => 'site/pages'
+    # add requirements to the frame param to restrict matches
+	  #:requirements => { :frame => /about|what-we-do|events/ }
 
-Run the migration. Add one or more frames (sections) by creating a page record with no parent for each frame.
+Run the migration. Add one or more frames (sections) by creating a page record
+with no parent for each frame.

@@ -1,0 +1,115 @@
+# about
+#   |
+#   +-- child_one
+#   |
+#   +-- child_two
+#   |     |
+#   |     +-- child_two_one
+#   |     |
+#   |     +-- child_two_two
+#   |           |
+#   |           +-- child_two_two_one
+#   |
+#   +-- child_three
+#   |
+#   +-- child_four
+#         |
+#         +-- child_four_one
+
+about:
+  id: 1
+  name: About
+  path: /about
+  slug: about
+  template: about
+  frame: about
+  position: 1
+  
+reference:
+  id: 2
+  name: Reference
+  path: /reference
+  slug: reference
+  template: reference
+  frame: reference
+  position: 1
+  
+child_one:
+  id: 3
+  name: Child One
+  parent_id: 1
+  path: '/about/child-one'
+  slug: child-one
+  template: generic
+  frame: about
+  position: 1
+  
+child_two:
+  id: 4
+  name: Child Two
+  parent_id: 1
+  path: '/about/child-two'
+  slug: child-two
+  template: generic
+  frame: about
+  position: 2
+  
+child_two_one:
+  id: 5
+  name: Child Two One
+  parent_id: 4
+  path: '/about/child-two/child-two-one'
+  slug: child-two-one
+  template: generic
+  frame: about
+  position: 1
+
+child_two_two:
+  id: 6
+  name: Child Two Two
+  parent_id: 4
+  path: '/about/child-two/child-two-two'
+  slug: child-two-two
+  template: generic
+  frame: about
+  position: 2
+  
+child_two_two_one:
+  id: 7
+  name: Child Two Two One
+  parent_id: 6
+  path: '/about/child-two/child-two-two/child-two-two-one'
+  slug: child-two-two-one
+  template: generic
+  frame: about
+  position: 1
+  
+child_three:
+  id: 8
+  name: Child Three
+  parent_id: 1
+  path: '/about/child-three'
+  slug: child-three
+  template: generic
+  frame: about
+  position: 3
+  
+child_four:
+  id: 9
+  name: Child Four
+  parent_id: 1
+  path: '/about/child-four'
+  slug: child-four
+  template: generic
+  frame: about
+  position: 4
+  
+child_four_one:
+  id: 10
+  name: Child Four One
+  parent_id: 9
+  path: '/about/child-four/child-four-one'
+  slug: child-four-one
+  template: generic
+  frame: about
+  position: 1
