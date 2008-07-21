@@ -19,6 +19,7 @@ class Page < ActiveRecord::Base
 
   before_validation :slugify, :build_path
   after_save :rebuild_path_recurse
+  before_destroy :check_associated
 
   validates_presence_of :name
   validates_presence_of :template
