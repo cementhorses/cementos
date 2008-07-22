@@ -9,6 +9,10 @@ class UndestroyableError < RuntimeError; end
 # are accounted for.
 class HasAssociatedError < RuntimeError; end
 
+# This exception is raised when a page is required and the attempt is made to
+# destroy it.
+class RequiredPageError < RuntimeError; end
+
 # The page model, a CMS staple.
 class Page < ActiveRecord::Base
   # For strip_tags method in search_results_text
@@ -17,6 +21,30 @@ class Page < ActiveRecord::Base
   acts_as_tree :order => :position
   acts_as_list :scope => :parent_id
 
+  class << self
+    def default_frame
+      frames.first
+    end
+
+    def frames
+      find_all_by_parent_id(nil).collect { |page| page.slug }
+      # Use the line below instead to define frames without using the database
+      # return [ 'about', 'what-we-do', 'events' ]
+    end
+
+    def template_options
+      # Add hidden items to the "excluded" array
+      excluded = ['load', 'home']
+      options = Dir.entries("#{RAILS_ROOT}/app/views/site/pages")
+      options = options.collect{ |t| t.sub(/\.+.*/, '') }.select{ |t| t !~ /\A_/ }
+      options += Site::PagesController.instance_methods(false)
+      options.delete_if { |i| excluded.include?(i) }
+      options.uniq!
+      options.sort!
+    end
+  end
+
+  after_initialize :set_template_to_generic
   before_validation :slugify, :build_path
   after_save :rebuild_path_recurse
   before_destroy :check_associated
@@ -67,30 +95,11 @@ class Page < ActiveRecord::Base
     insert_at another_page.position + 1
   end
 
-  class << self
-    def default_frame
-      frames.first
-    end
-
-    def frames
-      find_all_by_parent_id(nil).collect{ |p| p.slug }
-      # use the line below instead to define frames without using the database
-      # return [ 'about', 'what-we-do', 'events' ]
-    end
-
-    def template_options
-      # add hidden items to the "excluded" array
-      excluded = ['load', 'home']
-      options = Dir.entries("#{RAILS_ROOT}/app/views/pages")
-      options = options.collect{|t| t.sub(/\.+.*/, '')}.select{|t| t !~ /\A_/}
-      options += PagesController.instance_methods(false)
-      options.delete_if { |i| excluded.include?(i) }
-      options.uniq!
-      options.sort!
-    end
-  end
-
   protected
+
+    def set_template_to_generic
+      self.template ||= 'generic'
+    end
 
     def slugify
       slugify! if slug.blank?
@@ -125,7 +134,8 @@ class Page < ActiveRecord::Base
     end
 
     def rebuild_path_recurse
-      children.each do |child|
+      # Page#find must be called to circumvent dirty attribute freezing
+      children.find(:all).each do |child|
         child.build_path
         child.save!
         child.rebuild_path_recurse
@@ -137,8 +147,14 @@ class Page < ActiveRecord::Base
     end
 
     def check_associated
-      raise HasAssociatedError, "#{name}'s children must be deleted first" unless children.empty?
-      raise UndestroyableError, "#{name} cannot be destroyed" if self == root
+      case
+      when self == root
+        raise UndestroyableError, "#{name} is a root page and cannot be destroyed"
+      when !children.empty?
+        raise HasAssociatedError, "#{name}'s children must be deleted first"
+      when !immutable_name.nil?
+        raise RequiredPageError, "#{name} is a required page and cannot be destroyed"
+      end
     end
 
 end
@@ -174,9 +190,9 @@ end
 #     :conditions => "pages.published = 1 and contents.container_type = 'Page'"
 # 
 #   def search_results_text
-#     textiles = []
-#     self.contents.each { |c| textiles << strip_tags(c.item.html) if c.item_type == "Textile"}
-#     return textiles.to_s  
+#     self.contents.inject([]) { |textiles, content|
+#       textiles << strip_tags(content.item.html) if content.item_type == "Textile"
+#     }.to_s
 #   end
 
 # Userstamp plugin

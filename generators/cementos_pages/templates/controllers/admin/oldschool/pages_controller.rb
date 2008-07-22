@@ -1,134 +1,128 @@
 class Admin::PagesController < ApplicationController
 
   before_filter :get_frame
-  before_filter :get_page, :only => [:show, :new, :create, :edit, :update, :destroy, :up, :down]
+  before_filter :get_page, :except => :index
+  after_filter :expire_cache, :only => [:update, :destroy]
 
-  def index
-    @root = Page.find_by_frame_and_parent_id(@frame, nil)
-  end
+  rescue_from ActiveRecord::RecordInvalid, :with => :record_invalid
+  rescue_from ActiveRecord::StaleObjectError, :with => :stale_object_error
 
-  def tree_toggle
-    session[:tree_toggles] = { } unless session[:tree_toggles]
-    session[:tree_toggles][params[:id]] = (params[:state] == 'true')
-  end
+  # render index, new, edit
 
   def show
-    redirect_to @page.path
+    respond_to do |format|
+      format.html { redirect_to @page.path }
+    end
   end
 
-  # new
-
-  # edit
-
   def create
-    @page = Page.new(params[:page])
-    # @page.edited_at = Time.now
-    if @page.save
-      flash[:notice] = "Page created: #{@page.path}"
-      redirect_to admin_pages_url
-    else
-      render :action => "new"
+    @page.save!
+    flash[:notice] = "Page created: #{@page.path}"
+    respond_to do |format|
+      format.html { redirect_to admin_pages_url }
     end
   end
 
   def update
-    @page = Page.find(params[:id])
-    # @page.edited_at = Time.now
-    # @app_settings = AppSettings.instance
-    expire_cache
-    @page.update_attributes(params[:page])
-    # @app_settings.update_attributes(params[:app_settings]) if params[:app_settings]
-    if @page.valid? #@app_settings.valid? && @page.valid?
-      flash[:notice] = "Page saved: #{@page.path}"
-      if params[:commit] == 'Save' # save and reload edit interface
-        render :action => 'edit'
-      else # save and done editing
-        redirect_to admin_pages_path
+    @page.update_attributes! params[:page]
+    flash[:notice] = "Page saved: #{@page.path}"
+    respond_to do |format|
+      format.html do
+        if params[:commit] == 'Save'
+          render :action => 'edit'
+        else
+          redirect_to admin_pages_path 
+        end
       end
-    else
-      render :action => "edit"
     end
-  rescue ActiveRecord::StaleObjectError
-    @page.reload
-    @page.errors.add_to_base 'Version inconsistency - this record has been modified since you started editing it.'
-    render :action => 'edit'
   end
 
-  # DELETE /pages/1
-  # DELETE /pages/1.xml
   def destroy
+    @page.destroy
+    @page.parent.sort_children
     expire_cache
-    unless @page
-      flash[:notice] = 'Could not delete. Page does not exist.'
-      redirect_to admin_pages_url
-      return
+    flash[:notice] = "Page deleted: #{@page.path}"
+
+    respond_to do |format|
+      format.html { redirect_to admin_pages_url }
     end
-    if @page.parent_id.nil?
-      flash[:notice] = "Cannot delete root page"
-    elsif !@page.immutable_name.nil?
-      flash[:notice] = "Cannot delete required page"
-    elsif !@page.children.empty?
-      flash[:notice] = "Cannot delete a page with sub-pages"
-    else
-      @parent = @page.parent
-      @page.destroy
-      @parent.sort_children
-      flash[:notice] = "Page deleted: #{@page.path}"
-    end
-    redirect_to admin_pages_url
+  end
+
+  # ===
+
+  def tree_toggle
+    session[:tree_toggles] = {} unless session[:tree_toggles]
+    session[:tree_toggles][params[:id]] = params[:state] == 'true'
   end
 
   def up
-    if @page.parent
-      @page.move_higher
-      @page.parent.sort_children
-      expire_cache
-      flash[:notice] = "Page moved: #{@page.path}"
-    else
-      flash[:notice] = 'Cannot move the root page.'
-    end
-    redirect_to admin_pages_path
+    move :up
   end
 
   def down
-    if @page.parent
-      @page.move_lower
-      @page.parent.sort_children
-      expire_cache
-      flash[:notice] = "Page moved: #{@page.path}"
-    else
-      flash[:notice] = 'Cannot move the root page.'
-    end  
-    redirect_to admin_pages_path
+    move :down
   end
 
   private
-  def get_frame
-    @frame = params[:frame]
-    unless Page.frames.include?(@frame)
-      @frame = Page.default_frame
-      if @frame 
-        redirect_to admin_pages_path(@frame)
-      else  
+
+    def get_frame
+      if Page.frames.include?(params[:frame])
+        @frame = params[:frame]
+        @root = Page.find_by_frame_and_parent_id(@frame, nil)
+      elsif Page.default_frame
+        redirect_to admin_pages_path(Page.default_frame)
+      else
         raise "No frames exist (page section root nodes). Please create one or more pages without parents."
       end
     end
-  end
 
-  def get_page
-    @page = Page.find(params[:id]) if params[:id]
-    @page ||= Page.new(:template => 'generic')
-  end
+    def get_page
+      @page = if params[:id]
+        Page.find params[:id]
+      else
+        Page.new params[:page]
+      end
+    end
 
-  def expire_cache
-    @page.parent ? expire_through(@page.parent) : expire_through(@page)
-  end
+    def move(direction)
+      flash[:notice] = if @page.parent
+        @page.__send__ case direction
+          when :up   then :move_higher
+          when :down then :move_lower
+        end
+        @page.parent.sort_children
+        expire_cache
+        "Page moved: #{@page.path}"
+      else
+        'Cannot move the root page.'
+      end
+      respond_to do |format|
+        format.html { redirect_to admin_pages_url }
+      end
+    end
 
-  def expire_through(p)
-    p.children.each do |c|
-      expire_through(c)
-    end if p && p.children.size > 0
-    self.class.expire_page(p.path)
-  end
+    def record_invalid
+      render :action => case params[:action]
+        when 'create' then 'new'
+        when 'update' then 'edit'
+      end
+    end
+
+    def stale_object_error
+      @page.reload
+      @page.errors.add_to_base 'This page has been modified since you started editing it.'
+      render :action => 'edit'
+    end
+
+    def expire_cache
+      @page.parent ? expire_through(@page.parent) : expire_through(@page)
+    end
+
+    def expire_through(page)
+      page.children.each do |child|
+        expire_through(child)
+      end
+      self.class.expire_page(page.path)
+    end
 
 end
