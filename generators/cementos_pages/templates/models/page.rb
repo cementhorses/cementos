@@ -132,6 +132,10 @@ class Page < ActiveRecord::Base
       end
     end
 
+    def should_not_be_parent_of_self
+      errors.add(:parent_id, 'cannot be self') if id == parent_id
+    end
+
     def check_associated
       raise HasAssociatedError, "#{name}'s children must be deleted first" unless children.empty?
       raise UndestroyableError, "#{name} cannot be destroyed" if self == root
