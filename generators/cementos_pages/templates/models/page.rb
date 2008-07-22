@@ -53,7 +53,8 @@ class Page < ActiveRecord::Base
   validates_presence_of :template
   validates_presence_of :slug, :if => :has_parent?
   validates_uniqueness_of :slug, :scope => :parent_id
-  validates_format_of :slug, :with => /^[a-z0-9\-]+$/, :message => 'may only contain lowercase letters, numbers and dashes'
+  validates_format_of :slug, :with => /^[a-z0-9\-]+$/,
+    :message => 'may only contain lowercase letters, numbers and dashes'
   validate :should_not_be_parent_of_self
 
   # Used by navigation views to determine whether to render children at all.
@@ -106,8 +107,8 @@ class Page < ActiveRecord::Base
     end
 
     def slugify!
-      self.slug = Iconv.iconv('ascii//translit', 'utf-8', self.name).to_s.
-        downcase.strip.gsub(/[\s_-]/, '-').gsub(/[^\w-]/, '').gsub(/\-/, '-')
+      self.slug = Iconv.iconv('ascii//translit', 'utf-8', name).to_s.downcase.
+        strip.gsub(/[\s_-]/, '-').gsub(/[^\w-]/, '').gsub(/\-+/, '-')
     end
 
     def sort_children
@@ -143,12 +144,12 @@ class Page < ActiveRecord::Base
     end
 
     def should_not_be_parent_of_self
-      errors.add(:parent_id, 'cannot be self') if id == parent_id
+      errors.add(:parent_id, 'cannot be self') if id == parent_id && !new_record?
     end
 
     def check_associated
       case
-      when self == root
+      when !has_parent?
         raise UndestroyableError, "#{name} is a root page and cannot be destroyed"
       when !children.empty?
         raise HasAssociatedError, "#{name}'s children must be deleted first"
