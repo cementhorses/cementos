@@ -1,2 +1,2 @@
-# Include hook code here
-
+require 'mixed_content'
+ActiveRecord::Base.send :include, Cementos::MixedContent
