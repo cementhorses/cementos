@@ -13,7 +13,7 @@ class Content < ActiveRecord::Base
   attr_accessor :to_be_destroyed
   attr_accessor :temporary_id
   
-  # return the actual id if it exists, otherwise make up a random id starting with a letter
+  # return the actual id if it exists, otherwise make up a random id starting with letter 't'
   def temporary_id
     @temporary_id ||= id || "t#{self.__id__}"
   end
