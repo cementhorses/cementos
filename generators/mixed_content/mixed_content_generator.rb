@@ -19,7 +19,7 @@ class MixedContentGenerator < Rails::Generator::Base
       # Models
       # content model included in plugin
       m.file 'models/textile.rb', 'app/models/textile.rb'
-      m.file 'models/image.rb', 'app/models/image.rb'
+      # m.file 'models/image.rb', 'app/models/image.rb'
       
 
       # Views
