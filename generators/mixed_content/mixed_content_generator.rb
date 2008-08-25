@@ -67,7 +67,8 @@ class MixedContentGenerator < Rails::Generator::Base
       unless options[:skip_migration]
         m.migration_template "migrate/create_contents.rb", 'db/migrate', 
                              :migration_file_name => "create_contents"
-       m.migration_template "migrate/create_textiles.rb", 'db/migrate', 
+        sleep 1 # srsly?
+        m.migration_template "migrate/create_textiles.rb", 'db/migrate', 
                             :migration_file_name => "create_textiles"
       end
 
