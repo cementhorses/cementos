@@ -39,9 +39,8 @@ class MixedContentGenerator < Rails::Generator::Base
       # m.file 'stylesheets/pages.css', 'public/stylesheets/pages.css'
 
       # Javascripts
-      # in plugin
-      # m.directory 'public/javascripts/admin'
-      # m.file 'javascripts/admin/mixed_content.js', 'public/javascripts/admin/mixed_content.js'
+      m.directory 'public/javascripts/admin'
+      m.file 'javascripts/admin/mixed_content.js', 'public/javascripts/admin/mixed_content.js'
 
       # # Images
       #   m.directory 'public/images/admin'

@@ -4,9 +4,6 @@ function newContent(type) {
     if (type == null) {
         type = $F('new_content_selector');
         $('new_content_selector').selectedIndex = 0;
-        // e = $('new_content_selector');
-        // type = e.options[e.selectedIndex].value;
-        // e.selectedIndex = 0;
     }
     if (type != '') {
         nextContentPosition = $('mixed_content').getElementsByClassName('sortable_position').length + 1;
