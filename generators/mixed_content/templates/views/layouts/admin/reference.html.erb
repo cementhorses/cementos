@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Reference</title>		
+		<link rel="Shortcut Icon" href="/favicon.ico" />
+		
+		<%= stylesheet_link_tag 'style' %>
+   		<%= javascript_include_tag :defaults %>
+	 		
+		<!--[if IE]>
+		<%= stylesheet_link_tag 'common-ie' %> 
+		<![endif]-->
+		<!--[if lte IE 6]>
+		<%= stylesheet_link_tag 'common-ie6' %> 
+		<![endif]-->
+		
+		<style type="text/css" media="screen">
+			
+			body {
+				margin: 15px;
+				padding: 15px;
+			}
+		
+			.mixedContent {
+				width: 100%;
+			}
+			
+			#mainContent {
+				width: 90%;
+				margin: 0 auto; 
+				background-image: none;
+			}
+			
+			#close_button {
+				float: right;
+			}
+			
+			pre {
+				height: 35px;
+				padding: 10px;
+				border: 1px solid #ccc;
+				font-size: 12px;
+				display: block;
+				clear: both;
+				overflow: auto;
+			}
+			
+			pre:hover {
+				background: #fff;
+				text-decoration: none;
+			}
+			
+			code {
+				display: none;
+			}
+			
+		/*	code a:link {
+						font-size: 12px;
+						text-decoration: none;
+						color: #666;
+					}
+					
+					code a:hover {
+						background: #fff;
+						color: black;
+						text-decoration: none;
+					}*/
+			
+			hr {
+				border: 0 none;
+				height: 1px;
+				border-top: 1px dashed #ccc;
+				margin: 20px 0;
+				padding: 0 0 0 0;
+			}
+			
+			
+			
+		</style>
+	</head>
+	<body style="background: #F7F4E8;">
+	<div id="top" style="background: none;">
+				<div id="close_button"><a href="#" onClick="window.close();">[close]</a></div>
+				<div style="clear:both;"></div>
+				
+				<div class="mixedContent">
+				
+				<h3>Reference</h3>
+				<hr />
+				
+				<%= yield %>
+				
+				</div>
+				
+	</div>	
+	</body>
+</html>

@@ -1,0 +1,7 @@
+<% fields_for object_name, content.item do |f| %>
+
+	<%= f.text_area :textile, :size => "28x12", :class => 'textile', :onFocus => 'textileHasFocus(this);' %>
+
+	<%= link_to "Textile reference", {:controller => 'admin/mixed_contents', :action => 'textile_reference', :parent_id => "#{object_name}[textile]"}, :onclick => "if (window.refPopUp) {window.refPopUp.close();}window.refPopUp = window.open(this.href, '_blank', 'height=300,width=630,scrollbars=yes,resizable=yes,status=no'); window.parent_id = \"page_contents__#{content.temporary_id}__item_textile\"; refPopUp.focus(); return false;" %>
+
+<% end %>

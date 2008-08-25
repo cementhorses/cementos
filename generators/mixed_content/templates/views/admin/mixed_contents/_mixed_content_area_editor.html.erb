@@ -1,0 +1,49 @@
+<script type="text/javascript">
+
+function newContent(type) {
+    if (type == null) {
+        type = $F('new_content_selector');
+        $('new_content_selector').selectedIndex = 0;
+        // e = $('new_content_selector');
+        // type = e.options[e.selectedIndex].value;
+        // e.selectedIndex = 0;
+    }
+    if (type != '') {
+        nextContentPosition = $('mixed_content').getElementsByClassName('sortable_position').length + 1;
+        <%= remote_function :update => 'mixed_content',
+        :position => :bottom,
+        :url => {:controller => 'admin/mixed_contents', :action => 'add_content', :container_id => container.id, :container_type => container.class.to_s, :object_name => object_name},
+        :with => "'position=' + nextContentPosition + '&item_type=' + type",
+        :complete => "createContentSortables();"
+        %>
+    }
+}
+
+</script>
+
+
+
+<div id="mixed_content">
+	<%= render :partial => 'admin/mixed_contents/mixed_content_item_editor', :collection => collection, :locals => {:object_name => object_name} %>
+</div>
+
+<div class="new_content">
+<%= select nil, 'new_content_selector', container.send(:"#{association_name}_mixed_content_types"), { :include_blank => true }, :onchange => 'newContent();', :id => 'new_content_selector' %>
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+createContentSortables();
+
+<% if collection.empty? %>
+newContent('Textile');
+<% end %>
+
+</script>
+

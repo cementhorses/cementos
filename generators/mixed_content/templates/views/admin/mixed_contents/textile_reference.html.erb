@@ -1,0 +1,73 @@
+<%
+
+@reference = [
+
+"*bold*",
+
+"_italic_",
+
+"This is an \"internal link\":/global/lorem",
+
+"This is an \"external link {external}\":http://www.example.com",
+
+"This is a \"pdf link {pdfLink}\":/filename.pdf",
+
+"h3. Headline Style 1",
+
+"h4. Headline Style 2",
+
+"h5. Headline Style 3",
+
+"h6. Headline Style 4",
+
+"bq. text blockquote ??cite information??",
+
+"p(pullQuote). A quote from the inline text",
+
+"p(pullQuote wCite). A quote from the inline text&#8221; &#8212; ??someone??",
+
+"|_. header 1 |_. header 2 |
+| col 1 |(altColumn). col 2 |
+| col 1 |(altColumn). col 2 |",
+
+"|\\2. Spanning two columns |
+| col 1 |(altColumn). col 2 |
+| col 1 |(altColumn). col 2 |",
+
+
+"# %first%
+# %second%
+# %third%",
+
+"* bullet 1 
+* bullet 2 
+** sub-bullet 2
+*** sub-sub bullet 2 
+* bullet 3",
+
+"p(interview). *name 1* talk talk talk
+p(interview). *name 2* talk talk talk",
+
+"<dl><dt>Table 1.</dt><dd>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut. </dd></dl>",
+
+"p(related). this is some related content",
+
+"This sentence ends with a reference to a footnote[1].",
+
+"fn1. This is a footnote referenced from earlier on the page"
+	
+
+	
+]
+
+
+%>
+
+<% @reference.each do |r| %>
+<%= RedCloth.new(r).to_html %>
+<a href="#" onclick="code = $(this).firstDescendant().innerHTML; textileInsert(code.substring(4, code.length - 3), window.opener.parent_id); return false" style="text-decoration: none;">
+	<code><!--<%= r %>--></code>
+	<pre><%=h r %></pre>
+</a>
+<hr />
+<% end %>

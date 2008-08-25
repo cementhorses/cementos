@@ -1,0 +1,45 @@
+<% content = mixed_content_item_editor %>
+<% fields_for "#{object_name}[#{content.temporary_id}]", content do |f| %>
+
+<% if content.to_be_destroyed %>
+
+	<%= f.hidden_field :to_be_destroyed %>
+
+<% else %>
+
+	<div class="content type<%= content.item_type %>" id="content_<%= content.temporary_id %>">
+		
+		<h6 class="content_draghandle">
+			<span class="content_title"><%= content.item_type.titleize %></span>
+			<span class="content_delete">
+				<%= link_to_remote "delete",
+				 				   :url => {:controller => 'admin/mixed_contents', :action => 'remove_content', :id => content.id, :object_name => object_name},
+								   :after => "fadeAndDestroy('content_#{content.temporary_id}');",
+								   :confirm => "Really delete this content?",
+								   :class => 'content_destroy'
+				%>
+			</span>
+		</h6>
+	
+			<% if content.item_type && content.item %>
+			<% content.item.errors.each do |error| %>
+				<strong><em><%= format_error(error) %></strong><br />
+			<% end %>
+			<% end %>
+	
+	
+			<% fields_for "#{f.object_name}[item]", content do |f_i| %>
+				<%= f_i.hidden_field :item_type %>
+			<% end %>
+			
+			<%= f.hidden_field :position, :class => 'sortable_position' %>
+			<%# f.hidden_field "#{content.temporary_id}[item_type]", content.item_type %>
+			<%# f.hidden_field "contents[#{content.temporary_id}][position]", content.position, :class => 'sortable_position' %>
+			<div class="content_container" id="content_container_<%= content.temporary_id %>">
+				<%= render :partial => "admin/mixed_contents/#{content.item_type.underscore}_editor", :locals => { :content => content, :id => content.temporary_id, :object_name => "#{f.object_name}[item]" } %>
+			</div>
+		</div>
+		
+<% end %>
+
+<% end %>
