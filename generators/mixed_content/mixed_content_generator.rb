@@ -24,7 +24,7 @@ class MixedContentGenerator < Rails::Generator::Base
 
       # Views
       m.directory 'app/views/admin'
-      m.directory 'app/views/admin/mixed_content'
+      m.directory 'app/views/admin/mixed_contents'
       m.file "views/admin/mixed_contents/_mixed_content_area_editor.html.erb", 'app/views/admin/mixed_contents/_mixed_content_area_editor.html.erb'
       m.file "views/admin/mixed_contents/_mixed_content_item_editor.html.erb", 'app/views/admin/mixed_contents/_mixed_content_item_editor.html.erb'
       m.file "views/admin/mixed_contents/_textile_editor.html.erb", 'app/views/admin/mixed_contents/_textile_editor.html.erb'
