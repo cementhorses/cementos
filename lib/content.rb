@@ -1,3 +1,25 @@
+# ALLOWED_TYPES = %w(StaticImage Textile) unless defined? ALLOWED_TYPES
+# ALLOWED_TYPES.each do |type|
+#   class_eval <<-"end_eval"
+#     def create_#{type.underscore}(attributes = {})
+#       self.item_type = #{type}
+#       self.item      = #{type}.create(attributes)
+#       self.save
+#     end
+#     
+#     def #{type.underscore}
+#       item.kind_of? #{type} ? item : nil
+#     end
+#   end_eval
+# end
+# 
+# # if this is evaluated in a plugin with something like,
+# #
+# #     has_mixed_content, :only => [:static_image, :textile]
+# #
+# # Then we would define the ALLOWED_TYPES and perhaps even the other methods
+# # there (@page.create_textile), modifying the class_eval as necessary.
+
 class Content < ActiveRecord::Base
   
   belongs_to :container, :polymorphic => true
@@ -13,7 +35,7 @@ class Content < ActiveRecord::Base
   attr_accessor :to_be_destroyed
   attr_accessor :temporary_id
   
-  # return the actual id if it exists, otherwise make up a random id starting with letter 't'
+  # return the actual id if it exists, otherwise make up a random id starting with a letter
   def temporary_id
     @temporary_id ||= id || "t#{self.__id__}"
   end
@@ -56,14 +78,14 @@ class Content < ActiveRecord::Base
     end
   end
   
-  def build_item(item_type = nil)
+  def build_item(item_type)
     # TODO: make this check whether the klass has "acts_as_mixed_content" instead of a static list
     # define allowed_types to prevent creating Users, for example
     allowed_types = %w{StaticImage Textile HelpInterruptor Slideshow DonateInterruptor DownloadLibrary AudioPlayer VideoPlayer ClickableImage}
-    item_type ||= self.item_type
+    self.item_type = item_type = item_type.to_s.classify
     klass = item_type.constantize
     if klass.methods && allowed_types.include?(item_type)
-      self.item = klass.new(:content => self)
+      self.item = klass.new#(:content => self)
     end
     return self.item
   end

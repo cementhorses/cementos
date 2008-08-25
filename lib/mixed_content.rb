@@ -42,7 +42,7 @@ module Cementos
                     
           alias_method "pre_mixed_content_#{configuration[:association_name].to_s}=".to_sym, "#{configuration[:association_name].to_s}=".to_sym
           
-          after_update "save_#{configuration[:association_name].to_s}=".to_sym
+          after_update "save_#{configuration[:association_name].to_s}".to_sym
                       
           class_eval <<-"end_eval"
 
@@ -53,6 +53,10 @@ module Cementos
               else
                 pre_mixed_content_#{configuration[:association_name].to_s}=(c)
               end
+            end
+            
+            def #{configuration[:association_name].to_s}_mixed_content_types
+              ['Image', 'Textile']
             end
 
             # need this to preserve order fields
