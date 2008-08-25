@@ -67,7 +67,6 @@ class MixedContentGenerator < Rails::Generator::Base
       unless options[:skip_migration]
         m.migration_template "migrate/create_contents.rb", 'db/migrate', 
                              :migration_file_name => "create_contents"
-        sleep 1 # srsly?
         m.migration_template "migrate/create_textiles.rb", 'db/migrate', 
                             :migration_file_name => "create_textiles"
       end
@@ -94,4 +93,15 @@ class MixedContentGenerator < Rails::Generator::Base
              "Don't generate a migration file for the pages model") { |v| options[:skip_migration] = v }
     end
 
+end
+
+# http://blog.stonean.com/2008/06/generators-and-timestamped-migrations.html
+if Rails::VERSION::MAJOR >= 2 && Rails::VERSION::MINOR >= 1
+  class Rails::Generator::Commands::Base
+    protected
+    def next_migration_string(padding = 3)
+      sleep(1)
+      Time.now.utc.strftime("%Y%m%d%H%M%S") 
+    end
+  end
 end
