@@ -6,6 +6,7 @@ class ImageAsset < Asset
                  :max_size => 500.kilobytes,
                  :thumbnails => { 
                    :thumb => '100x100!', 
+                   :default => '369x199!',
                    :small => '186x', 
                    :large => '396x'
                  },

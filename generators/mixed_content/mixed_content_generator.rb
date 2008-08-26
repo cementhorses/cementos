@@ -33,6 +33,12 @@ class MixedContentGenerator < Rails::Generator::Base
       m.file 'views/admin/mixed_contents/_image_editor.html.erb', 'app/views/admin/mixed_contents/_image_editor.html.erb'
       m.directory 'app/views/layouts/admin'
       m.file 'views/layouts/admin/reference.html.erb', 'app/views/layouts/admin/reference.html.erb'
+      
+      m.directory 'app/views/mixed_content'
+      m.file 'views/mixed_content/_textile.html.erb', 'app/views/mixed_content/_textile.html.erb'
+      m.file 'views/mixed_content/_image.html.erb', 'app/views/mixed_content/_image.html.erb'
+      m.file 'views/mixed_content/_content.html.erb', 'app/views/mixed_content/_content.html.erb'
+      
      
       # Stylesheets
 

@@ -17,6 +17,14 @@
       render :partial => find_partial('mixed_content_area_editor'), :locals => locals
     end
     
+    def mixed_content( options = {} )
+      raise ArgumentError, 'Missing a valid mixed content container' unless options[:container].is_a?(ActiveRecord::Base)
+      options.merge!({  :association_name => :contents })
+      collection => options[:container].send(options[:association_name].to_sym)
+      }
+      render :partial => 'mixed_content/content', :collection => collection
+    end
+    
     def find_partial( partial )
       if File.exist? "#{local_views_path}/_#{partial}.html.erb"
         "admin/mixed_contents/#{partial}"
