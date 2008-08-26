@@ -1,5 +1,5 @@
 <div class="showcase">
 	<img src="<%= item.image_asset.public_filename(:default) %>" alt="<%= item.title %>" />
 	<p><strong><%= item.title %></strong> <%= item.caption %></p>
-	<% unless item.copyright.blank? %><p><%= item.copyright %></p><% end %>
+	<% unless item.copyright.blank? %><cite><%= item.copyright %></cite><% end %>
 </div>

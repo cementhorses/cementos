@@ -14,7 +14,7 @@ class Textile < ActiveRecord::Base
   end
   
   def get_search_text
-    strip_tags(html)
+    strip_tags(cached_html)
   end
   
 end
