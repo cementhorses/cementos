@@ -81,7 +81,7 @@ class Content < ActiveRecord::Base
   def build_item(item_type)
     # TODO: make this check whether the klass has "acts_as_mixed_content" instead of a static list
     # define allowed_types to prevent creating Users, for example
-    allowed_types = %w{StaticImage Textile HelpInterruptor Slideshow DonateInterruptor DownloadLibrary AudioPlayer VideoPlayer ClickableImage}
+    allowed_types = %w{Image Textile HelpInterruptor Slideshow DonateInterruptor DownloadLibrary AudioPlayer VideoPlayer ClickableImage}
     self.item_type = item_type = item_type.to_s.classify
     klass = item_type.constantize
     if klass.methods && allowed_types.include?(item_type)
