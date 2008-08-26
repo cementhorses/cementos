@@ -30,7 +30,7 @@
       <%= render :partial => 'admin/assets/asset_uploader', :locals => {
         :object_name => object_name,
         :class_name  => content.item.class.name,
-        :asset       => StaticImageAsset.find_by_id(content.item.asset_id)
+        :asset       => ImageAsset.find_by_id(content.item.asset_id)
       } %>
     </div>
   </fieldset>
