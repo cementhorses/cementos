@@ -60,7 +60,7 @@ class MixedContentGenerator < Rails::Generator::Base
       # m.route_resources :pages
 
       # README
-      # m.readme('README')
+      m.readme('README')
 
     end
   end
