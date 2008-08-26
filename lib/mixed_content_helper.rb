@@ -21,7 +21,6 @@
       raise ArgumentError, 'Missing a valid mixed content container' unless options[:container].is_a?(ActiveRecord::Base)
       options.merge!({  :association_name => :contents })
       collection = options[:container].send(options[:association_name].to_sym)
-      }
       render :partial => 'mixed_content/content', :collection => collection
     end
     
