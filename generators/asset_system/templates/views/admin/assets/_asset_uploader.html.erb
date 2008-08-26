@@ -1,0 +1,34 @@
+<% asset_prefix ||= '' %>
+<% asset_name = object_name + (!asset_prefix.blank? ? asset_prefix : "") %>
+<% underscored_asset_prefix = asset_prefix.blank? ? '' : (asset_prefix + "_") %>
+<div id="<%= asset_name %>_asset">
+	<div id="<%= asset_name %>_asset_errors">	
+	</div>
+  <%= hidden_field_tag asset_prefix.blank? ? "#{object_name}[asset_id]" : "#{object_name}[#{asset_prefix}_asset_id]", asset ? asset.id : nil %>
+  <% content_tag :div, :id => "#{asset_name}_asset_upload", :style => ('display: none;' unless asset) do %>
+    <% if asset %>
+      <%= image_tag asset.public_filename(:thumb), :alt => abbreviate_filename(asset.public_filename(:thumb)) if asset.thumb %>
+      <%= content_tag :span, abbreviate_filename(asset.public_filename) if asset.thumb.nil? %>
+    <% end %>
+    <%= link_to_function 'Detach', "Element.hide('#{asset_name}_asset_upload'); Element.show('#{asset_name}_asset_uploader'); $('#{object_name}[#{underscored_asset_prefix}asset_id]').value = ''" %>
+  <% end %>
+  <% content_tag :div, :id => "#{asset_name}_asset_uploader", :style => ('display: none;' if asset) do %>
+  <%= label_tag :asset_uploaded_data, 'Upload', :id => "#{asset_name}_upload_button", :class => 'upload_button' %>
+  <% end %>
+  <script type="text/javascript" charset="utf-8">
+    //<![CDATA[
+      $('<%= asset_name %>_upload_button').observe('mouseover', function() {
+        $('asset_parent_type').value = '<%= class_name %>';
+        $('asset_object_name').value = '<%= object_name %>';
+        $('asset_object_prefix').value = '<%= asset_prefix %>';
+
+        coords = $('<%= asset_name %>_upload_button').cumulativeOffset();
+		coords[0] = (coords[0]+68);
+		fieldWidth = $('asset_uploaded_data').getWidth();
+        
+        Element.setStyle('asset_uploaded_data', { top: (coords[1])+'px', left: (coords[0]-fieldWidth)+'px', position: 'absolute' });
+		
+      });
+    //]]>
+  </script>
+</div>

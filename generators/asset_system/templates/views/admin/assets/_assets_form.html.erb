@@ -1,0 +1,8 @@
+<iframe name="upload_frame" style="display:none;"></iframe>
+<% form_for :asset, :url => admin_assets_path, :html => { :multipart => true, :target => 'upload_frame' } do |f| %>
+  <%= f.file_field :uploaded_data, :class => 'real_file_field', :onchange => 'this.form.submit();' %>
+  
+  <%= hidden_field_tag 'type',         nil, :id => 'asset_parent_type' %>
+  <%= hidden_field_tag 'object_name',  nil, :id => 'asset_object_name' %>
+  <%= hidden_field_tag 'asset_prefix', nil, :id => 'asset_object_prefix' %>  
+<% end %>

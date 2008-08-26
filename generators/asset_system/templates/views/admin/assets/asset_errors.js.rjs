@@ -1,0 +1,1 @@
+page[params[:object_name] + (!params[:asset_prefix].blank? ? params[:asset_prefix] : "") + '_asset_errors'].replace_html(rails_error_messages_for(:asset, :header_message => '', :message => '')).visual_effect(:highlight)

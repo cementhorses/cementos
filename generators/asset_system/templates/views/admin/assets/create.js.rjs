@@ -1,0 +1,6 @@
+page[params[:object_name] + params[:asset_prefix] + '_asset'].replace :partial => 'admin/assets/asset_uploader', :locals => {
+  :object_name => params[:object_name],
+  :asset_prefix => params[:asset_prefix],
+  :class_name  => params[:type],
+  :asset       => @asset
+}
