@@ -1,0 +1,3 @@
+Be sure to install asset_system if you are using the built-in mixed content types
+
+  script/generate asset_system

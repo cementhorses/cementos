@@ -25,6 +25,10 @@
       end
     end
     
+    def format_error(error)
+      error.first.humanize.gsub(/asset/, 'file') << " " << error.last
+    end
+    
     protected
     def local_views_path;         "#{RAILS_ROOT}/app/views/admin/mixed_contents" end
     def plugin_views_path;        "../../vendor/plugins/cementos/views/mixed_content" end

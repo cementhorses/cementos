@@ -1,0 +1,3 @@
+Be sure to first install the responds_to_parent plugin
+
+	script/plugin install responds_to_parent
