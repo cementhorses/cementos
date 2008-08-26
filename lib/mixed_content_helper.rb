@@ -25,8 +25,21 @@
       end
     end
     
+    #TODO: rename
     def format_error(error)
       error.first.humanize.gsub(/asset/, 'file') << " " << error.last
+    end
+    
+    #TODO: move to asset system helper
+    # replaces characters in the middle of the filename
+    # if the filename is too long
+    def abbreviate_filename(file_path)
+      filename = File.basename(file_path, '.*').capitalize
+      if filename.length > 25
+        filename[0..11] + "..." + filename[(filename.length-10)..filename.length]
+      else
+        filename
+      end
     end
     
     protected
