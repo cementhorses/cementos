@@ -1,0 +1,38 @@
+<% fields_for object_name, content.item do |f| %>
+<div class="columns">
+  <fieldset class="column first three">
+    <div class="field inline">
+		<%= f.label      :title %>
+		<%= f.text_field :title %> <!-- select tag? (+url?) -->
+    </div>
+    <div class="field inline">
+		<%= f.label      :caption %>
+		<%= f.text_area  :caption, :rows => 4 %>
+    </div>
+
+	<div class="field inline">
+		<%= f.label      :copyright %>
+		<%= f.text_area  :copyright, :rows => 2 %>
+    </div>
+    <div class="field inline image_select">
+		<%= f.label 	:float, 'Align' %>
+		<%= f.select 	:float, ['center', 'left', 'right'] %>
+    </div>
+
+	<div class="field inline image_select">
+      	<%= f.label 	:size %>
+		<%= f.select 	:size, ['small', 'large'] %>
+    </div>
+  </fieldset>
+  <fieldset class="column">
+    <div class="field">
+      <%= f.label      :image_file %>
+      <%= render :partial => 'admin/assets/asset_uploader', :locals => {
+        :object_name => object_name,
+        :class_name  => content.item.class.name,
+        :asset       => StaticImageAsset.find_by_id(content.item.asset_id)
+      } %>
+    </div>
+  </fieldset>
+</div>
+<% end %>
