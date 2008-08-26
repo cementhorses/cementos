@@ -31,8 +31,8 @@ class MixedContentGenerator < Rails::Generator::Base
       # Stylesheets
 
       # Javascripts
-      m.directory 'public/javascripts/admin'
-      m.file 'javascripts/admin/mixed_content.js', 'public/javascripts/admin/mixed_content.js'
+      # m.directory 'public/javascripts/admin'
+      # m.file 'javascripts/admin/mixed_content.js', 'public/javascripts/admin/mixed_content.js'
 
    
       # Tests
@@ -56,7 +56,7 @@ class MixedContentGenerator < Rails::Generator::Base
   protected
 
     def banner
-      "Usage: #{$0} cementos_pages"
+      "Usage: #{$0} asset_system"
     end
 
     def add_options!(opt)
