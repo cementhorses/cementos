@@ -1,4 +1,4 @@
-class MixedContentGenerator < Rails::Generator::Base
+class AssetSystemGenerator < Rails::Generator::Base
 
   default_options :skip_migration => false
 
