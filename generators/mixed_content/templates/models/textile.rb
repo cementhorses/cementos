@@ -10,7 +10,7 @@ class Textile < ActiveRecord::Base
     # @textile ||= ''
     #     @html = RedCloth.new(textile).to_html
     write_attribute :textile, "" unless textile
-    write_attribute :html, RedCloth.new(textile).to_html
+    write_attribute :cached_html, RedCloth.new(textile).to_html
   end
   
   def get_search_text
