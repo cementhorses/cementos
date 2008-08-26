@@ -41,7 +41,7 @@ class AssetSystemGenerator < Rails::Generator::Base
       # Migration
       unless options[:skip_migration]
         m.migration_template "migrate/create_assets.rb", 'db/migrate', 
-                             :migration_file_name => "create_contents"
+                             :migration_file_name => "create_assets"
       end
 
       # Routes
