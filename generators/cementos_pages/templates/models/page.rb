@@ -125,7 +125,6 @@ class Page < ActiveRecord::Base
     def build_path
       slugs = ancestors.collect { |page| page.slug }.reverse! << self.slug
       self.path = '/' + slugs * '/'
-      # Set frame to slug for root pages
       self.frame = root.frame
       path
     end
