@@ -21,7 +21,7 @@ class Admin::MixedContentsController < ApplicationController
     if @content
       @content.to_be_destroyed = true
       render :update do |page|
-        page.insert_html :bottom, :mixed_content, :partial => 'content', :locals => {:content => @content, :object_name => params[:object_name]}
+        page.insert_html :bottom, :mixed_content, :partial => 'mixed_content_item_editor', :object => @content, :locals => {:object_name => params[:object_name]}
       end
     else 
       render :nothing => true

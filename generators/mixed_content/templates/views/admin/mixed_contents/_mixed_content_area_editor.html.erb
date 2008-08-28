@@ -25,7 +25,8 @@ function newContent(type) {
 </div>
 
 <div class="new_content">
-<%= select nil, 'new_content_selector', container.send(:"#{association_name}_mixed_content_types"), { :include_blank => true }, :onchange => 'newContent();', :id => 'new_content_selector' %>
+	Add Mixed Content: 
+	<%= select nil, 'new_content_selector', container.send(:"#{association_name}_mixed_content_types"), { :include_blank => true }, :onchange => 'newContent();', :id => 'new_content_selector' %>
 </div>
 
 
