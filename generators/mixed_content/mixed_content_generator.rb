@@ -21,6 +21,10 @@ class MixedContentGenerator < Rails::Generator::Base
       m.file 'models/textile.rb', 'app/models/textile.rb'
       m.file 'models/image.rb', 'app/models/image.rb'
       m.file 'models/image_asset.rb', 'app/models/image_asset.rb'
+      m.file 'models/download_library.rb', 'app/models/download_library.rb'
+      m.file 'models/download.rb', 'app/models/download.rb'
+      m.file 'models/download_asset.rb', 'app/models/download_asset.rb'
+      
       
 
       # Views
@@ -31,6 +35,8 @@ class MixedContentGenerator < Rails::Generator::Base
       m.file "views/admin/mixed_contents/_textile_editor.html.erb", 'app/views/admin/mixed_contents/_textile_editor.html.erb'
       m.file "views/admin/mixed_contents/textile_reference.html.erb", 'app/views/admin/mixed_contents/textile_reference.html.erb'
       m.file 'views/admin/mixed_contents/_image_editor.html.erb', 'app/views/admin/mixed_contents/_image_editor.html.erb'
+      m.file "views/admin/mixed_contents/_download_library_editor.html.erb", 'app/views/admin/mixed_contents/_download_library_editor.html.erb'
+      m.file "views/admin/mixed_contents/_download_editor.html.erb", 'app/views/admin/mixed_contents/_download_editor.html.erb'
       m.directory 'app/views/layouts/admin'
       m.file 'views/layouts/admin/reference.html.erb', 'app/views/layouts/admin/reference.html.erb'
       

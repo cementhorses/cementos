@@ -32,7 +32,7 @@ class Admin::MixedContentsController < ApplicationController
     klass = params[:sub_item_type].constantize
     @sub_item = klass.new
     @object_name = params[:object_name]
-    render :partial => klass.name.underscore, :locals => {:sub_item => @sub_item, :object_name => @object_name}
+    render :partial => "#{klass.name.underscore}_editor", :locals => {:sub_item => @sub_item, :object_name => @object_name}
   end
   
   def remove_sub_item
@@ -40,7 +40,7 @@ class Admin::MixedContentsController < ApplicationController
     @sub_item = klass.find_by_id params[:id].to_i
     if @sub_item
       @sub_item.to_be_destroyed = true
-      render :partial => klass.name.underscore, :locals => {:sub_item => @sub_item, :object_name => params[:object_name]}
+      render :partial => "#{klass.name.underscore}_editor", :locals => {:sub_item => @sub_item, :object_name => params[:object_name]}
     else
       render :nothing => true
     end
