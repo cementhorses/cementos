@@ -56,7 +56,7 @@ module Cementos
             end
             
             def #{configuration[:association_name].to_s}_mixed_content_types
-              ['Image', 'Textile']
+              ['Image', 'Textile', ['Download Library','DownloadLibrary']]
             end
 
             # need this to preserve order fields

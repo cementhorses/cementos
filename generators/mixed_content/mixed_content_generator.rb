@@ -59,7 +59,11 @@ class MixedContentGenerator < Rails::Generator::Base
         m.migration_template "migrate/create_textiles.rb", 'db/migrate', 
                             :migration_file_name => "create_textiles"
         m.migration_template "migrate/create_images.rb", 'db/migrate', 
-                            :migration_file_name => "create_images"                
+                            :migration_file_name => "create_images"  
+        m.migration_template "migrate/create_downloads.rb", 'db/migrate', 
+                            :migration_file_name => "create_downloads"
+        m.migration_template "migrate/create_download_libraries.rb", 'db/migrate', 
+                            :migration_file_name => "create_download_libraries"              
       end
 
       # Routes
