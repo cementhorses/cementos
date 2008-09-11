@@ -1,0 +1,48 @@
+<% fields_for "#{object_name}[downloads][#{sub_item.temporary_id}]", sub_item do |f| %>
+	<% if sub_item.to_be_destroyed %>
+		<%= f.hidden_field :to_be_destroyed %>
+	<% else %>
+	
+		<% download_div = "download_#{sub_item.temporary_id}" %>
+		<div class="download" id="<%= download_div %>">
+			<span class="remove_button">
+				<%= link_to_remote 	'[X]',
+									:update => download_div,
+									:url => { 	:controller => 'admin/contents',
+					 							:action => 'remove_sub_item',
+												:id => sub_item.id,
+												:sub_item_type => 'Download',
+												:object_name => object_name
+											}
+				%>
+			</span>
+			<br />
+			
+			<div class="field inline leading-text">
+				<%= f.label :leading_text %>
+				<%= f.text_area :leading_text, :size => '20x3' %>
+			</div>
+			
+			<div class="field inline">
+		    	<%= f.label :name %>
+				<%= f.text_field :name %>
+			</div>
+			
+			<div class="field inline">
+				<%= f.label :caption %>
+				<%= f.text_area :caption, :size => '20x3' %>
+			</div>
+		
+			<div class="field inline">
+				<%= f.label :file %>
+		    	<%= render	:partial => 'admin/assets/asset_uploader', 
+						:locals => {  	:object_name => f.object_name,
+		        						:class_name  => sub_item.class.name,
+		        						:asset       => DownloadAsset.find_by_id(sub_item.asset_id)
+		      						} 
+				%>
+			</div>
+	
+		</div>
+	<% end %>
+<% end %>

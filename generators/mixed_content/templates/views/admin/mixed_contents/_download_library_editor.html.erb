@@ -1,0 +1,44 @@
+<% fields_for object_name, content.item do |f| %>
+<% download_div = "slideshow_#{content.item.temporary_id}_downloads"%>
+
+	<fieldset>
+
+		<div class="field boxes">
+			<%= f.check_box :display_as_library, :onclick => "toggleLibraryMode('#{download_div}')" %> <%= f.label :display_as_library, 'Display as Download Library' %>
+		</div>
+	
+	
+	
+		<div class="field">
+			<p><strong><%= link_to_remote 	'+ add download to this library', 
+						:update => download_div, 
+						:position => :bottom,
+						:url => {  	:controller => 'admin/contents', 
+									:action => :add_sub_item,
+									:object_name => object_name,
+									:sub_item_type => 'Download'
+									} %></strong></p>
+		</div>
+			
+	</fieldset>
+	
+	<div id="<%= download_div %>">
+		
+		<% content.item.downloads.each do |download| %>
+			<%= render :partial => 'admin/contents/download', :locals => {:sub_item => download, :object_name => f.object_name}%>
+		<% end %>
+	
+	</div>
+	
+	<script type="text/javascript">
+		function toggleLibraryMode(id) {
+			$(id).select('div.leading-text').each(function(e) {
+				e.toggle();
+			});
+		}
+		<% if content.item.display_as_library? %>
+			toggleLibraryMode('<%= download_div %>');
+		<% end %>
+	</script>
+	
+<% end %>
