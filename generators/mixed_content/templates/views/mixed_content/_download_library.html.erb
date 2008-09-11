@@ -1,0 +1,24 @@
+<% if item.display_as_library %>
+
+	<div id="downloadLibrary">
+	<hr />
+	<h5>Download Library</h5>
+		<% item.downloads.each_with_index do |download, i| %>
+			<% if (i % 3).zero? %><ul><% end %>
+				<li><div class="fileType">Adobe PDF [<%= number_to_human_size download.download_asset.size %>]</div><a href="<%=  download.download_asset.public_url %>" target="_blank"><%= download.name %></a><%= download.caption %></li>
+			<%  if ((i % 3) + 1).zero?  %></ul><% end %>
+		<% end %>
+	</div>
+	<div class="clear"></div>
+	
+<% else %>
+
+	<% item.downloads.each do |download| %>
+		<p>
+			<%= download.leading_text if download.leading_text %>
+			<a href="<%= download.download_asset.public_url %>" target="_blank" class="pdfLink"><%= download.name %></a>
+			<%= download.caption if download.caption %>
+		</p>
+	<% end %>
+
+<% end %>

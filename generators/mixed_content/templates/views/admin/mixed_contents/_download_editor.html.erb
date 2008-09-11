@@ -8,7 +8,7 @@
 			<span class="remove_button">
 				<%= link_to_remote 	'[X]',
 									:update => download_div,
-									:url => { 	:controller => 'admin/contents',
+									:url => { 	:controller => 'admin/mixed_contents',
 					 							:action => 'remove_sub_item',
 												:id => sub_item.id,
 												:sub_item_type => 'Download',

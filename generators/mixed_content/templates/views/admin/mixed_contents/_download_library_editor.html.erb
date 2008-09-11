@@ -13,7 +13,7 @@
 			<p><strong><%= link_to_remote 	'+ add download to this library', 
 						:update => download_div, 
 						:position => :bottom,
-						:url => {  	:controller => 'admin/contents', 
+						:url => {  	:controller => 'admin/mixed_contents', 
 									:action => :add_sub_item,
 									:object_name => object_name,
 									:sub_item_type => 'Download'
@@ -25,7 +25,7 @@
 	<div id="<%= download_div %>">
 		
 		<% content.item.downloads.each do |download| %>
-			<%= render :partial => 'admin/contents/download', :locals => {:sub_item => download, :object_name => f.object_name}%>
+			<%= render :partial => 'admin/mixed_contents/download_editor', :locals => {:sub_item => download, :object_name => f.object_name}%>
 		<% end %>
 	
 	</div>

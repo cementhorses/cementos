@@ -44,6 +44,7 @@ class MixedContentGenerator < Rails::Generator::Base
       m.file 'views/mixed_content/_textile.html.erb', 'app/views/mixed_content/_textile.html.erb'
       m.file 'views/mixed_content/_image.html.erb', 'app/views/mixed_content/_image.html.erb'
       m.file 'views/mixed_content/_content.html.erb', 'app/views/mixed_content/_content.html.erb'
+      m.file 'views/mixed_content/_download_library.html.erb', 'app/views/mixed_content/_download_library.html.erb'
       
      
       # Stylesheets
