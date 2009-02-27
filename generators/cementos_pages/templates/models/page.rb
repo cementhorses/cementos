@@ -29,7 +29,7 @@ class Page < ActiveRecord::Base
     def frames
       find_all_by_parent_id(nil).collect { |page| page.slug }
       # Use the line below instead to define frames without using the database
-      # return [ 'about', 'what-we-do', 'events' ]
+      # return [ 'about', 'products', 'events' ]
     end
 
     def template_options
@@ -61,6 +61,12 @@ class Page < ActiveRecord::Base
   # (Should this move to a helper?)
   def visible_navigation_children
     children.select { |c| c.published? and c.display_in_navigation? }
+  end
+  
+  def cache?
+    return false unless perform_caching?
+    return :action if members_only?
+    return :page # otherwise
   end
 
   def has_parent?
