@@ -14,7 +14,7 @@ And add the following to your routes.rb:
   # Hungry page path for Cementos Pages should be lowest priority route
   map.connect '/:frame/*path', :controller => 'site/pages'
     # add requirements to the frame param to restrict matches
-	  #:requirements => { :frame => /about|what-we-do|events/ }
+    # :requirements => { :frame => /about|products|events/ }
 
 Run the migration. Add one or more frames (sections) by creating a page record
 with no parent for each frame.
