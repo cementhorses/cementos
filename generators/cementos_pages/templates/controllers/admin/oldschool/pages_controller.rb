@@ -24,6 +24,7 @@ class Admin::PagesController < ApplicationController
   end
 
   def update
+    expire_cache
     @page.update_attributes! params[:page]
     flash[:notice] = "Page saved: #{@page.path}"
     respond_to do |format|
@@ -38,13 +39,28 @@ class Admin::PagesController < ApplicationController
   end
 
   def destroy
-    @page.destroy
-    @page.parent.sort_children
-    expire_cache
-    flash[:notice] = "Page deleted: #{@page.path}"
-
+   @page = Page.find_by_id(params[:id])
+   expire_cache_through_parent
+   unless @page
+     flash[:notice] = 'Could not delete. Page does not exist.'
+     redirect_to admin_pages_url
+     return
+   end
+    if @page.parent_id.nil?
+      flash[:notice] = "Cannot delete root page"
+    elsif !@page.immutable_name.nil?
+      flash[:notice] = "Cannot delete required page"
+    elsif !@page.children.empty?
+      flash[:notice] = "Cannot delete a page with sub-pages"
+    else
+       @parent = @page.parent
+       @page.destroy
+       @parent.sort_children
+       flash[:notice] = "Page deleted: #{@page.path}"
+    end
     respond_to do |format|
       format.html { redirect_to admin_pages_url }
+      format.xml  { head :ok }
     end
   end
 

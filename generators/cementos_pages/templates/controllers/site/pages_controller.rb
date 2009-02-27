@@ -1,6 +1,12 @@
 class Site::PagesController < ApplicationController
   
+  before_filter :load_page, :except => :home # get the @page object to decide how to cache it
+  caches_action :index, :if => Proc.new{|c| c.instance_variable_get("@page") && c.instance_variable_get("@page").cache? == :action }
   before_filter :load, :except => :home
+  
+  # uncomment this line to cache the home page as well
+  # caches_page :home
+
 
   # == Begin Template Actions
 
@@ -16,18 +22,27 @@ class Site::PagesController < ApplicationController
   end
 
   protected
-
-    def load
-      @frame, @path = (params[:frame] || ''), (params[:path] || [])
-      long_path = '/' + File.join(@frame, @path)
-      long_path.chop! if long_path.ends_with?('/') # Fails to find '/:frame/'
-      @page = Page.find_by_path(long_path)
-      if @page and @page.published?
-        __send__(@page.template) if respond_to?(@page.template)
-        render :action => @page.template unless performed?
+  def load
+    if @page && @page.published?
+      if @page.members_only && !logged_in?
+        login_required
       else
-        raise ActiveRecord::RecordNotFound
+        self.send(@page.template) if self.respond_to?(@page.template)
+        render :action => @page.template unless performed?
+        # Cache page based off conditionals
+        cache_page if @page && @page.cache? == :page
       end
+    else
+      raise ActiveRecord::RecordNotFound
     end
+  end
+
+  def load_page
+    params[:path] ||= [ ]
+    @frame = params[:frame] || ''
+    path = '/' + File.join(@frame, params[:path])
+    path.chop! if path.ends_with?('/') # Attempt fails to find '/:frame/'
+    @page = Page.find_by_path(path)
+  end
 
 end

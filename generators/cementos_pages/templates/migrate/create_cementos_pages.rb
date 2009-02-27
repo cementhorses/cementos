@@ -16,6 +16,9 @@ class CreateCementosPages < ActiveRecord::Migration
       t.boolean  "published",             :default => true,  :null => false
       t.datetime "created_at"
       t.datetime "updated_at"
+      t.boolean  "perform_caching",       :default => true, :null => false
+      t.string   "navigation_override"
+      t.string   "members_only",          :default => false, :null => false
     end
   end
 

@@ -7,8 +7,10 @@ A plugin that wraps several modules useful in Rails CMS.
 Example
 =======
 
-Example goes here.
-
+Options:
+  --skip_migration (don't create the migration for pages table, good for re-installing)
+  --interface draggable
+  
 
 Be sure to script/plugin install acts_as_tree
 and acts_as_list
