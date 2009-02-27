@@ -26,7 +26,7 @@ module Cementos
           configuration = { :association_name => association_name, :allowed_types => :all }
           configuration.update(options) if options.is_a?(Hash)
           
-          has_many configuration[:association_name], :order => 'position ASC', :as => :container do
+          has_many configuration[:association_name], :order => 'position ASC', :as => :container, :dependent => :destroy do
             #TODO: add dependent option
               def update_from_params(params_hash = {})
               params_hash.each do |content_id, content_fields|
@@ -37,6 +37,7 @@ module Cementos
                 end
               end
               self.sort!{|x,y| x.position <=> y.position}
+              self.each_with_index{|c,i| c.position = i}
             end  
           end
                     
@@ -53,10 +54,6 @@ module Cementos
               else
                 pre_mixed_content_#{configuration[:association_name].to_s}=(c)
               end
-            end
-            
-            def #{configuration[:association_name].to_s}_mixed_content_types
-              ['Image', 'Textile', ['Download Library','DownloadLibrary']]
             end
 
             # need this to preserve order fields

@@ -1,17 +1,23 @@
   module MixedContentHelper
     
     # mixed_content_editor :container => @page
-    def mixed_content_editor( options = {} ) 
+    def mixed_content_editor(*args)
+      options = args.extract_options!
       raise ArgumentError, 'Missing a valid mixed content container' unless options[:container].is_a?(ActiveRecord::Base)
-      options.merge!({  :association_name => :contents,
-                        :default_content_type => nil
-      })
-      options.merge!({  :object_name => "#{options[:container].class.to_s.underscore}[#{options[:association_name]}]"
+      defaults = {  :association_name => :contents,
+                    :content_types => [],
+                    :default_content_type => nil,
+                    :maximum => nil
+      }
+      options = defaults.merge options
+      options.merge!({  :object_name => "#{args.shift || options[:container].class.to_s.underscore}[#{options[:association_name]}]"
       })
       locals = {  :container => options[:container],
                   :collection => options[:container].send(options[:association_name].to_sym),
                   :object_name => options[:object_name],
-                  :association_name => options[:association_name]
+                  :association_name => options[:association_name],
+                  :content_types => options[:content_types],
+                  :maximum => options[:maximum]
       }
       # render :partial => 'mixed_content_editor', :locals => locals
       render :partial => find_partial('mixed_content_area_editor'), :locals => locals

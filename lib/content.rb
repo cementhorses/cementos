@@ -23,7 +23,7 @@
 class Content < ActiveRecord::Base
   
   belongs_to :container, :polymorphic => true
-  belongs_to :item, :polymorphic => true
+  belongs_to :item, :polymorphic => true, :dependent => :destroy
   
   # removed acts_as_list: interferes with new item order as they are being saved across validations
   # acts_as_list :scope => :container_id
@@ -78,14 +78,14 @@ class Content < ActiveRecord::Base
     end
   end
   
-  def build_item(item_type)
+  def build_item(item_type = nil)
     # TODO: make this check whether the klass has "acts_as_mixed_content" instead of a static list
     # define allowed_types to prevent creating Users, for example
     allowed_types = %w{Image Textile HelpInterruptor Slideshow DonateInterruptor DownloadLibrary AudioPlayer VideoPlayer ClickableImage}
-    self.item_type = item_type = item_type.to_s.classify
+    item_type ||= self.item_type
     klass = item_type.constantize
     if klass.methods && allowed_types.include?(item_type)
-      self.item = klass.new#(:content => self)
+      self.item = klass.new(:content => self)
     end
     return self.item
   end
